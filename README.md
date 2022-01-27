@@ -1,6 +1,7 @@
 ## BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation
 
 This is the PyTorch implementation of the <a href="https://arxiv.org/abs/2107.07651">BLIP paper</a>. The code has been tested on PyTorch 1.9 and 1.10.
+To install the dependencies, run <pre/>pip install -r requirements.txt</pre> 
 
 Catalog:
 - [ ] Inference demo
