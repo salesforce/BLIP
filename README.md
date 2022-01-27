@@ -1,5 +1,7 @@
 ## BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation
 
+<img src="img.png" width="600">
+
 This is the PyTorch implementation of the <a href="https://arxiv.org/abs/2107.07651">BLIP paper</a>. The code has been tested on PyTorch 1.9 and 1.10.
 To install the dependencies, run <pre/>pip install -r requirements.txt</pre> 
 
@@ -65,3 +67,12 @@ NLVR2 | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLI
 3. To finetune the pre-trained checkpoint using 16 A100 GPUs, first set 'pretrained' in configs/nlvr.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth". Then run:
 <pre>python -m torch.distributed.run --nproc_per_node=16 --use_env train_nlvr.py </pre> 
 
+### Citation
+If you find this code to be useful for your research, please consider citing.
+<pre>
+@inproceedings{ALBEF,
+      title={Align before Fuse: Vision and Language Representation Learning with Momentum Distillation}, 
+      author={Junnan Li and Ramprasaath R. Selvaraju and Akhilesh Deepak Gotmare and Shafiq Joty and Caiming Xiong and Steven Hoi},
+      year={2021},
+      booktitle={NeurIPS},
+}</pre>
