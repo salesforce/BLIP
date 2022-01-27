@@ -10,7 +10,7 @@ Catalog:
 - [x] Pre-trained and finetuned checkpoints
 - [x] Finetuning code for Image-Text Retrieval, Image Captioning, VQA, and NLVR2
 - [x] Pre-training code
-- [x] Download of bootstrapped image-text datasets 
+- [x] Download of bootstrapped pre-training datasets 
 
 
 ### Inference demo (Image Captioning and VQA):
@@ -66,6 +66,20 @@ NLVR2 | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLI
 <pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_nlvr.py --evaluate</pre> 
 3. To finetune the pre-trained checkpoint using 16 A100 GPUs, first set 'pretrained' in configs/nlvr.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth". Then run:
 <pre>python -m torch.distributed.run --nproc_per_node=16 --use_env train_nlvr.py </pre> 
+
+### Pre-train:
+1. Prepare training json files where each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'image': path_of_image, 'caption': text_of_image}. 
+2. In configs/pretrain.yaml, set 'train_file' as the paths for the json files .
+3. Pre-train the model using 8 A100 GPUs:
+<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env pretrain.py --config ./configs/Pretrain.yaml --output_dir output/Pretrain </pre> 
+
+### Pre-training datasets download:
+We provide bootstrapped pre-training datasets as json files. Each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'url': url_of_image, 'caption': text_of_image}. 
+
+Image source | Filtered web caption | Filtered synthetic caption | Filtered synthetic caption by ViT-L
+--- | :---: | :---: | :---:
+CC3M+CC12M+SBU |  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/ccs_filtered.json">Download</a>|  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/ccs_synthetic_filtered.json">Download</a>|  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/ccs_synthetic_filtered_large.json">Download</a>
+LAION115M | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/laion_filtered.json">Download</a>|  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/laion_synthetic_filtered.json">Download</a>|  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/laion_synthetic_filtered_large.json">Download</a>
 
 ### Citation
 If you find this code to be useful for your research, please consider citing.
