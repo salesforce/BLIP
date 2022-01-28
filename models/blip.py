@@ -5,6 +5,8 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  * By Junnan Li
 '''
+import warnings
+warnings.filterwarnings("ignore")
 
 from models.vit import VisionTransformer, interpolate_pos_embed
 from models.med import BertConfig, BertModel, BertLMHeadModel
