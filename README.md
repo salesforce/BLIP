@@ -2,7 +2,7 @@
 
 <img src="BLIP.gif" width="700">
 
-This is the PyTorch implementation of the <a href="https://arxiv.org/abs/">BLIP paper</a>. The code has been tested on PyTorch 1.9 and 1.10.
+This is the PyTorch implementation of the <a href="https://arxiv.org/abs/">BLIP paper</a>. The code has been tested on PyTorch 1.10.
 To install the dependencies, run <pre/>pip install -r requirements.txt</pre> 
 
 Catalog:
