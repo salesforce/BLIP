@@ -84,9 +84,8 @@ LAION115M | <a href="https://storage.googleapis.com/sfr-vision-language-research
 ### Citation
 If you find this code to be useful for your research, please consider citing.
 <pre>
-@inproceedings{ALBEF,
-      title={Align before Fuse: Vision and Language Representation Learning with Momentum Distillation}, 
-      author={Junnan Li and Ramprasaath R. Selvaraju and Akhilesh Deepak Gotmare and Shafiq Joty and Caiming Xiong and Steven Hoi},
-      year={2021},
-      booktitle={NeurIPS},
+@inproceedings{BLIP,
 }</pre>
+
+### Acknowledgement
+The implementation of BLIP relies on resources from <a href="https://github.com/salesforce/ALBEF">ALBEF</a>, <a href="https://github.com/huggingface/transformers">Huggingface Transformers</a>, and <a href="https://github.com/rwightman/pytorch-image-models/tree/master/timm">timm</a>. We thank the original authors for their open-sourcing.
