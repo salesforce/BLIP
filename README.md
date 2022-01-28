@@ -14,7 +14,7 @@ Catalog:
 
 
 ### Inference demo (Image Captioning and VQA):
-Run our interactive demo using Colab notebook (no GPU needed):
+Run our interactive demo using <a href="https://colab.research.google.com/github/salesforce/BLIP/blob/main/demo.ipynb">Colab notebook</a> (no GPU needed):
 
 ### Pre-trained checkpoints:
 Num. pre-train images | BLIP w/ ViT-B | BLIP w/ ViT-B and CapFilt-L | BLIP w/ ViT-L 
