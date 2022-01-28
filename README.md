@@ -6,7 +6,7 @@ This is the PyTorch implementation of the <a href="https://arxiv.org/abs/2107.07
 To install the dependencies, run <pre/>pip install -r requirements.txt</pre> 
 
 Catalog:
-- [ ] Inference demo
+- [x] Inference demo
 - [x] Pre-trained and finetuned checkpoints
 - [x] Finetuning code for Image-Text Retrieval, Image Captioning, VQA, and NLVR2
 - [x] Pre-training code
