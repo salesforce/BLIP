@@ -35,43 +35,43 @@ NLVR2 | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLI
 ### Image-Text Retrieval:
 1. Download COCO and Flickr30k datasets from the original websites, and set 'image_root' in configs/retrieval_{dataset}.yaml accordingly.
 2. To evaluate the finetuned BLIP model on COCO, run:
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_retrieval.py \
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_retrieval.py \
 --config ./configs/retrieval_coco.yaml \
 --output_dir output/retrieval_coco \
 --evaluate</pre> 
 3. To finetune the pre-trained checkpoint using 8 A100 GPUs, first set 'pretrained' in configs/retrieval_coco.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth". Then run:
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_retrieval.py \
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_retrieval.py \
 --config ./configs/retrieval_coco.yaml \
 --output_dir output/retrieval_coco </pre> 
 
 ### Image-Text Captioning:
 1. Download COCO and NoCaps datasets from the original websites, and set 'image_root' in configs/caption_coco.yaml and configs/nocaps.yaml accordingly.
 2. To evaluate the finetuned BLIP model on COCO, run:
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_caption.py --evaluate</pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_caption.py --evaluate</pre> 
 3. To evaluate the finetuned BLIP model on NoCaps, generate results with: (evaluation needs to be performed on official server)
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env eval_nocaps.py </pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 eval_nocaps.py </pre> 
 4. To finetune the pre-trained checkpoint using 8 A100 GPUs, first set 'pretrained' in configs/caption_coco.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model*_base.pth". Then run:
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_caption.py </pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_caption.py </pre> 
 
 ### VQA:
 1. Download VQA v2 dataset and Visual Genome dataset from the original websites, and set 'vqa_root' and 'vg_root' in configs/vqa.yaml.
 2. To evaluate the finetuned BLIP model, generate results with: (evaluation needs to be performed on official server)
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_vqa.py --evaluate</pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_vqa.py --evaluate</pre> 
 3. To finetune the pre-trained checkpoint using 16 A100 GPUs, first set 'pretrained' in configs/vqa.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model*_base.pth". Then run:
-<pre>python -m torch.distributed.run --nproc_per_node=16 --use_env train_vqa.py </pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=16 train_vqa.py </pre> 
 
 ### NLVR2:
 1. Download NLVR2 dataset from the original websites, and set 'image_root' in configs/nlvr.yaml.
 2. To evaluate the finetuned BLIP model, run
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env train_nlvr.py --evaluate</pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 train_nlvr.py --evaluate</pre> 
 3. To finetune the pre-trained checkpoint using 16 A100 GPUs, first set 'pretrained' in configs/nlvr.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth". Then run:
-<pre>python -m torch.distributed.run --nproc_per_node=16 --use_env train_nlvr.py </pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=16 train_nlvr.py </pre> 
 
 ### Pre-train:
 1. Prepare training json files where each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'image': path_of_image, 'caption': text_of_image}. 
 2. In configs/pretrain.yaml, set 'train_file' as the paths for the json files .
 3. Pre-train the model using 8 A100 GPUs:
-<pre>python -m torch.distributed.run --nproc_per_node=8 --use_env pretrain.py --config ./configs/Pretrain.yaml --output_dir output/Pretrain </pre> 
+<pre>python -m torch.distributed.run --nproc_per_node=8 pretrain.py --config ./configs/Pretrain.yaml --output_dir output/Pretrain </pre> 
 
 ### Pre-training datasets download:
 We provide bootstrapped pre-training datasets as json files. Each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'url': url_of_image, 'caption': text_of_image}. 
