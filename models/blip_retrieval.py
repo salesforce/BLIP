@@ -9,7 +9,7 @@ from models.blip import create_vit, init_tokenizer, load_checkpoint
 
 class BLIP_Retrieval(nn.Module):
     def __init__(self,                 
-                 med_config = './configs/med_config.json',  
+                 med_config = 'configs/med_config.json',  
                  image_size = 384,
                  vit = 'base',
                  vit_grad_ckpt = False,
