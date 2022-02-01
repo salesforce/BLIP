@@ -17,6 +17,8 @@ Catalog:
 Run our interactive demo using <a href="https://colab.research.google.com/github/salesforce/BLIP/blob/main/demo.ipynb">Colab notebook</a> (no GPU needed).
 The demo includes code for: (1) image captioning, (2) open-ended visual question answering, (3) multimodal / unimodal feature extraction.
 
+Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try out the Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/BLIP)
+
 ### Pre-trained checkpoints:
 Num. pre-train images | BLIP w/ ViT-B | BLIP w/ ViT-B and CapFilt-L | BLIP w/ ViT-L 
 --- | :---: | :---: | :---: 
