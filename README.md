@@ -70,6 +70,9 @@ NLVR2 | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLI
 3. To finetune the pre-trained checkpoint using 16 A100 GPUs, first set 'pretrained' in configs/nlvr.yaml as "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth". Then run:
 <pre>python -m torch.distributed.run --nproc_per_node=16 train_nlvr.py </pre> 
 
+### Finetune with ViT-L:
+In order to finetune a model with ViT-L, simply change the config file to set 'vit' as large. Batch size and learning rate may also need to be adjusted accordingly (please see the paper's appendix for hyper-parameter details). <a href="https://github.com/facebookresearch/fairscale">Gradient checkpoint</a> can also be activated in the config file to reduce GPU memory usage. 
+
 ### Pre-train:
 1. Prepare training json files where each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'image': path_of_image, 'caption': text_of_image}. 
 2. In configs/pretrain.yaml, set 'train_file' as the paths for the json files .
