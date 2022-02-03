@@ -14,8 +14,12 @@ Catalog:
 
 
 ### Inference demo:
-Run our interactive demo using <a href="https://colab.research.google.com/github/salesforce/BLIP/blob/main/demo.ipynb">Colab notebook</a> (no GPU needed).
-The demo includes code for: (1) image captioning, (2) open-ended visual question answering, (3) multimodal / unimodal feature extraction.
+Run our interactive demo using [Colab notebook](https://colab.research.google.com/github/salesforce/BLIP/blob/main/demo.ipynb) (no GPU needed).
+The demo includes code for: 
+1. Image captioning
+2. Open-ended visual question answering
+3. Multimodal / unimodal feature extraction
+4. Image-text matching
 
 Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try out the Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/BLIP)
 
