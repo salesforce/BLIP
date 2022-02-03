@@ -32,7 +32,7 @@ def train(model, data_loader, optimizer, epoch, device):
     # train
     model.train()  
     
-    metric_logger = utils.MetricLogger(delimiter="  ")
+    metric_logger = utils.MetricLogger(args, delimiter="  ")
     metric_logger.add_meter('lr', utils.SmoothedValue(window_size=1, fmt='{value:.6f}'))
     metric_logger.add_meter('loss', utils.SmoothedValue(window_size=1, fmt='{value:.4f}'))
     header = 'Train Caption Epoch: [{}]'.format(epoch)
@@ -61,7 +61,7 @@ def evaluate(model, data_loader, device, config):
     # evaluate
     model.eval() 
     
-    metric_logger = utils.MetricLogger(delimiter="  ")
+    metric_logger = utils.MetricLogger(args, delimiter="  ")
     header = 'Caption generation:'
     print_freq = 10
 
@@ -192,6 +192,10 @@ if __name__ == '__main__':
     parser.add_argument('--world_size', default=1, type=int, help='number of distributed processes')    
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
     parser.add_argument('--distributed', default=True, type=bool)
+    # Weights and Biases arguments
+    parser.add_argument("--use_wandb", default=True, type = bool, help = "Whether to use W&B for metric logging")
+    parser.add_argument("--wandb_project", default="BLIP", type=str, help="Name of the W&B Project")
+    parser.add_argument("--wandb_entity", default=None, type=str, help="entity to use for W&B logging")
     args = parser.parse_args()
 
     config = yaml.load(open(args.config, 'r'), Loader=yaml.Loader)
