@@ -21,6 +21,8 @@ The demo includes code for:
 3. Multimodal / unimodal feature extraction
 4. Image-text matching
 
+Replicate web demo and Docker image is available at [![Replicate](https://replicate.com/salesforce/blip/badge)](https://replicate.com/salesforce/blip)
+
 Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try out the Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/BLIP)
 
 ### Pre-trained checkpoints:
