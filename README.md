@@ -35,6 +35,8 @@ VQA | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/
 NLVR2 | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_nlvr.pth">Download</a>| - | - 
 
 
+To log all your metrics to a [**Weights and Biases Dashboard**](https://wandb.ai/) [![Explore-in W&B](https://img.shields.io/badge/Explore--in-W%26B-%23FFBE00)](https://wandb.ai/sauravm/BLIP) set the `--use_wandb` flag to True while running the scripts and pass in your API key when prompted. To further customize the process you can set the `--wandb_project` ("BLIP" by default) and `--wandb_entity` flags.
+
 ### Image-Text Retrieval:
 1. Download COCO and Flickr30k datasets from the original websites, and set 'image_root' in configs/retrieval_{dataset}.yaml accordingly.
 2. To evaluate the finetuned BLIP model on COCO, run:
