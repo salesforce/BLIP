@@ -10,6 +10,7 @@ Catalog:
 - [x] Pre-trained and finetuned checkpoints
 - [x] Finetuning code for Image-Text Retrieval, Image Captioning, VQA, and NLVR2
 - [x] Pre-training code
+- [x] Zero-shot video-text retrieval
 - [x] Download of bootstrapped pre-training datasets 
 
 
@@ -84,6 +85,12 @@ In order to finetune a model with ViT-L, simply change the config file to set 'v
 2. In configs/pretrain.yaml, set 'train_file' as the paths for the json files .
 3. Pre-train the model using 8 A100 GPUs:
 <pre>python -m torch.distributed.run --nproc_per_node=8 pretrain.py --config ./configs/Pretrain.yaml --output_dir output/Pretrain </pre> 
+
+### Zero-shot video-text retrieval:
+1. Download MSRVTT dataset following the instructions from https://github.com/salesforce/ALPRO, and set 'video_root' accordingly in configs/retrieval_msrvtt.yaml.
+2. Install [decord](https://github.com/dmlc/decord) with <pre>pip install decord</pre> 
+3. To perform zero-shot evaluation, run
+<pre>python -m torch.distributed.run --nproc_per_node=8 eval_retrieval_video.py</pre> 
 
 ### Pre-training datasets download:
 We provide bootstrapped pre-training datasets as json files. Each json file contains a list. Each item in the list is a dictonary with two key-value pairs: {'url': url_of_image, 'caption': text_of_image}. 
