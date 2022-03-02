@@ -4,7 +4,7 @@ train_files: ['vqa_train','vqa_val','vg_qa']
 ann_root: 'annotation'
 
 # set pretrained as a file path or an url
-pretrained: 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model*_vqa.pth'
+pretrained: 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_vqa_capfilt_large.pth'
 
 # size of vit model; base or large
 vit: 'base'
