@@ -1,4 +1,4 @@
-image_root: '/export/share/datasets/vision/coco/images/'
+image_root: '/content/BLIP/dataset/coco/images'
 ann_root: 'annotation'
 dataset: 'coco'
 
