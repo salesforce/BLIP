@@ -46,7 +46,8 @@ class vqa_dataset(Dataset):
         elif ann['dataset']=='vg':
             image_path = os.path.join(self.vg_root,ann['image'])  
             
-        image = Image.open(image_path).convert('RGB')   
+        image = Image.open(image_path).convert('RGB')
+        print(image_path)
         image = self.transform(image)          
         
         if self.split == 'test':
