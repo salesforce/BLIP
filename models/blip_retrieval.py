@@ -103,10 +103,7 @@ class BLIP_Retrieval(nn.Module):
             text_feat_m_all = torch.cat([text_feat_m.t(),self.text_queue.clone().detach()],dim=1)
 
             sim_i2t_m = image_feat_m @ text_feat_m_all / self.temp  
-            sim_t2i_m = text_feat_m @ image_feat_m_all / self.temp 
-
-            sim_targets = torch.zeros(sim_i2t_m.size()).to(image.device)
-            sim_targets.fill_diagonal_(1)          
+            sim_t2i_m = text_feat_m @ image_feat_m_all / self.temp   
 
             sim_i2t_targets = alpha * F.softmax(sim_i2t_m, dim=1) + (1 - alpha) * sim_targets
             sim_t2i_targets = alpha * F.softmax(sim_t2i_m, dim=1) + (1 - alpha) * sim_targets        
