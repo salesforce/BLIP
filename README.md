@@ -103,13 +103,11 @@ LAION115M | <a href="https://storage.googleapis.com/sfr-vision-language-research
 ### Citation
 If you find this code to be useful for your research, please consider citing.
 <pre>
-@misc{li2022blip,
+@inproceedings{li2022blip,
       title={BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}, 
       author={Junnan Li and Dongxu Li and Caiming Xiong and Steven Hoi},
       year={2022},
-      eprint={2201.12086},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+      booktitle={ICML},
 }</pre>
 
 ### Acknowledgement
