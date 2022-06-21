@@ -16,16 +16,14 @@ import json
 from pathlib import Path
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 import torch.distributed as dist
-from torch.utils.data import DataLoader
 
-from models.blip_retrieval import blip_retrieval
+from blip.models.blip_retrieval import blip_retrieval
 import utils
 from utils import cosine_lr_schedule
-from data import create_dataset, create_sampler, create_loader
+from blip.data import create_dataset, create_sampler, create_loader
 
 
 def train(model, data_loader, optimizer, epoch, device, config):

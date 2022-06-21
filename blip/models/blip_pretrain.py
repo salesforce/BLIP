@@ -5,8 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  * By Junnan Li
 '''
-from models.med import BertConfig, BertModel, BertLMHeadModel
-from transformers import BertTokenizer
+from blip.models.med import BertConfig, BertModel, BertLMHeadModel
 import transformers
 transformers.logging.set_verbosity_error()
 
@@ -14,7 +13,8 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from models.blip import create_vit, init_tokenizer, load_checkpoint
+from blip.models.blip import create_vit, init_tokenizer
+
 
 class BLIP_Pretrain(nn.Module):
     def __init__(self,                 

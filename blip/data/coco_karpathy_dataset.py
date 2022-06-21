@@ -6,7 +6,7 @@ from torchvision.datasets.utils import download_url
 
 from PIL import Image
 
-from data.utils import pre_caption
+from blip.data.utils import pre_caption
 
 class coco_karpathy_train(Dataset):
     def __init__(self, transform, image_root, ann_root, max_words=30, prompt=''):        

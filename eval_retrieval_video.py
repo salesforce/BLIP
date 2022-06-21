@@ -16,15 +16,14 @@ import json
 from pathlib import Path
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 from torch.utils.data import DataLoader
 
-from models.blip_retrieval import blip_retrieval
+from blip.models.blip_retrieval import blip_retrieval
 import utils
-from data.video_dataset import VideoDataset
+from blip.data import VideoDataset
 
 
 @torch.no_grad()

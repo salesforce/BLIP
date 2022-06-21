@@ -16,18 +16,15 @@ import json
 from pathlib import Path
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 
-from models.blip_vqa import blip_vqa
+from blip.models.blip_vqa import blip_vqa
 import utils
 from utils import cosine_lr_schedule
-from data import create_dataset, create_sampler, create_loader
-from data.vqa_dataset import vqa_collate_fn
-from data.utils import save_result
+from blip.data import create_dataset, create_sampler, create_loader
+from blip.data.vqa_dataset import vqa_collate_fn
+from blip.data import save_result
 
 
 def train(model, data_loader, optimizer, epoch, device):

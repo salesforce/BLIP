@@ -1,7 +1,6 @@
 from torch.utils.data import Dataset
 from torchvision.datasets.utils import download_url
 
-from PIL import Image
 import torch
 import numpy as np
 import random
@@ -9,7 +8,7 @@ import decord
 from decord import VideoReader
 import json
 import os
-from data.utils import pre_caption
+from blip.data.utils import pre_caption
 
 decord.bridge.set_bridge("torch")
 

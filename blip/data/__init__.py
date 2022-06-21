@@ -3,12 +3,12 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.transforms.functional import InterpolationMode
 
-from data.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval, coco_karpathy_retrieval_eval
-from data.nocaps_dataset import nocaps_eval
-from data.flickr30k_dataset import flickr30k_train, flickr30k_retrieval_eval
-from data.vqa_dataset import vqa_dataset
-from data.nlvr_dataset import nlvr_dataset
-from data.pretrain_dataset import pretrain_dataset
+from blip.data.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval, coco_karpathy_retrieval_eval
+from blip.data.nocaps_dataset import nocaps_eval
+from blip.data.flickr30k_dataset import flickr30k_train, flickr30k_retrieval_eval
+from blip.data.vqa_dataset import vqa_dataset
+from blip.data.nlvr_dataset import nlvr_dataset
+from blip.data.pretrain_dataset import pretrain_dataset
 from transform.randaugment import RandomAugment
 
 def create_dataset(dataset, config, min_scale=0.5):

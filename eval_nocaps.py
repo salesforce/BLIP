@@ -10,22 +10,15 @@ import os
 import ruamel_yaml as yaml
 import numpy as np
 import random
-import time
-import datetime
-import json
 from pathlib import Path
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
-import torch.distributed as dist
-from torch.utils.data import DataLoader
 
-from models.blip import blip_decoder
+from blip.models import blip_decoder
 import utils
-from data import create_dataset, create_sampler, create_loader
-from data.utils import save_result
+from blip.data import create_dataset, create_sampler, create_loader
+from blip.data import save_result
 
 @torch.no_grad()
 def evaluate(model, data_loader, device, config):

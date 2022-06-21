@@ -1,11 +1,10 @@
 import os
 import json
-import random
 from PIL import Image
 
 import torch
 from torch.utils.data import Dataset
-from data.utils import pre_question
+from blip.data.utils import pre_question
 
 from torchvision.datasets.utils import download_url
 

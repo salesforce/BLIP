@@ -1,6 +1,4 @@
 import json
-import os
-import random
 
 from torch.utils.data import Dataset
 
@@ -9,7 +7,7 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 Image.MAX_IMAGE_PIXELS = None
 
-from data.utils import pre_caption
+from blip.data.utils import pre_caption
 import os,glob
 
 class pretrain_dataset(Dataset):
