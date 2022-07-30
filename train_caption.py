@@ -7,7 +7,7 @@
 '''
 import argparse
 import os
-import ruamel_yaml as yaml
+import ruamel.yaml as yaml
 import numpy as np
 import random
 import time
@@ -27,6 +27,7 @@ import utils
 from utils import cosine_lr_schedule
 from data import create_dataset, create_sampler, create_loader
 from data.utils import save_result, coco_caption_eval
+from models.adapter import set_trainable_parameters, print_trainable_params, print_num_params
 
 def train(model, data_loader, optimizer, epoch, device):
     # train
@@ -110,16 +111,21 @@ def main(args, config):
     print("Creating model")
     model = blip_decoder(pretrained=config['pretrained'], image_size=config['image_size'], vit=config['vit'], 
                            vit_grad_ckpt=config['vit_grad_ckpt'], vit_ckpt_layer=config['vit_ckpt_layer'], 
-                           prompt=config['prompt'])
+                           prompt=config['prompt'], adapter_config={'vit_adapter': config['vit_adapter']})
 
     model = model.to(device)   
-    
+
+    if config['vit_adapter']:
+        set_trainable_parameters(model.visual_encoder)
+    set_trainable_parameters(model.text_decoder)
+    print_num_params(model)
+
     model_without_ddp = model
     if args.distributed:
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
         model_without_ddp = model.module    
     
-    optimizer = torch.optim.AdamW(params=model.parameters(), lr=config['init_lr'], weight_decay=config['weight_decay'])
+    optimizer = torch.optim.AdamW(params=filter(lambda p: p.requires_grad, model.parameters()), lr=config['init_lr'], weight_decay=config['weight_decay'])
             
     best = 0
     best_epoch = 0
@@ -185,7 +191,7 @@ def main(args, config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default='./configs/caption_coco.yaml')
-    parser.add_argument('--output_dir', default='output/Caption_coco')        
+    parser.add_argument('--output_dir', default='output/Caption_coco/debug')        
     parser.add_argument('--evaluate', action='store_true')    
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--seed', default=42, type=int)

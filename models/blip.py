@@ -83,6 +83,7 @@ class BLIP_Decoder(nn.Module):
                  vit_grad_ckpt = False,
                  vit_ckpt_layer = 0,
                  prompt = 'a picture of ',
+                 adapter_config = None,
                  ):
         """
         Args:
@@ -92,7 +93,7 @@ class BLIP_Decoder(nn.Module):
         """            
         super().__init__()
         
-        self.visual_encoder, vision_width = create_vit(vit,image_size, vit_grad_ckpt, vit_ckpt_layer)
+        self.visual_encoder, vision_width = create_vit(vit,image_size, vit_grad_ckpt, vit_ckpt_layer, adapter_config=adapter_config)
         self.tokenizer = init_tokenizer()   
         med_config = BertConfig.from_json_file(med_config)
         med_config.encoder_width = vision_width
@@ -173,7 +174,8 @@ def blip_decoder(pretrained='',**kwargs):
     model = BLIP_Decoder(**kwargs)
     if pretrained:
         model,msg = load_checkpoint(model,pretrained)
-        assert(len(msg.missing_keys)==0)
+        print(msg)
+        # assert(len(msg.missing_keys)==0)
     return model    
     
 def blip_feature_extractor(pretrained='',**kwargs):
@@ -191,20 +193,20 @@ def init_tokenizer():
     return tokenizer
 
 
-def create_vit(vit, image_size, use_grad_checkpointing=False, ckpt_layer=0, drop_path_rate=0):
+def create_vit(vit, image_size, use_grad_checkpointing=False, ckpt_layer=0, drop_path_rate=0, adapter_config=None):
         
     assert vit in ['base', 'large'], "vit parameter must be base or large"
     if vit=='base':
         vision_width = 768
         visual_encoder = VisionTransformer(img_size=image_size, patch_size=16, embed_dim=vision_width, depth=12, 
                                            num_heads=12, use_grad_checkpointing=use_grad_checkpointing, ckpt_layer=ckpt_layer,
-                                           drop_path_rate=0 or drop_path_rate
+                                           drop_path_rate=0 or drop_path_rate, adapter_config=adapter_config
                                           )   
     elif vit=='large':
         vision_width = 1024
         visual_encoder = VisionTransformer(img_size=image_size, patch_size=16, embed_dim=vision_width, depth=24, 
                                            num_heads=16, use_grad_checkpointing=use_grad_checkpointing, ckpt_layer=ckpt_layer,
-                                           drop_path_rate=0.1 or drop_path_rate
+                                           drop_path_rate=0.1 or drop_path_rate, adapter_config=adapter_config
                                           )   
     return visual_encoder, vision_width
 

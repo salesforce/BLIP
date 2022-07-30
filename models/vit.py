@@ -20,6 +20,8 @@ from timm.models.helpers import named_apply, adapt_input_conv
 
 from fairscale.nn.checkpoint.checkpoint_activations import checkpoint_wrapper
 
+from .adapter import AdapterModule
+
 class Mlp(nn.Module):
     """ MLP as used in Vision Transformer, MLP-Mixer and related networks
     """
@@ -89,7 +91,8 @@ class Attention(nn.Module):
 class Block(nn.Module):
 
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, use_grad_checkpointing=False):
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, use_grad_checkpointing=False,
+                 adapter_config=None):
         super().__init__()
         self.norm1 = norm_layer(dim)
         self.attn = Attention(
@@ -103,10 +106,19 @@ class Block(nn.Module):
         if use_grad_checkpointing:
             self.attn = checkpoint_wrapper(self.attn)
             self.mlp = checkpoint_wrapper(self.mlp)
+        
+        self.use_adapter = adapter_config['vit_adapter']
+        if self.use_adapter:
+            self.adapter_after_attn = AdapterModule(dim, 16)
+            self.adapter_after_mlp = AdapterModule(dim, 16)
 
     def forward(self, x, register_hook=False):
-        x = x + self.drop_path(self.attn(self.norm1(x), register_hook=register_hook))
-        x = x + self.drop_path(self.mlp(self.norm2(x)))
+        if self.use_adapter:
+            x = x + self.drop_path(self.adapter_after_attn(self.attn(self.norm1(x), register_hook=register_hook)))
+            x = x + self.drop_path(self.adapter_after_mlp(self.mlp(self.norm2(x))))
+        else:
+            x = x + self.drop_path(self.attn(self.norm1(x), register_hook=register_hook))
+            x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
     
@@ -118,7 +130,7 @@ class VisionTransformer(nn.Module):
     def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., qkv_bias=True, qk_scale=None, representation_size=None,
                  drop_rate=0., attn_drop_rate=0., drop_path_rate=0., norm_layer=None, 
-                 use_grad_checkpointing=False, ckpt_layer=0):
+                 use_grad_checkpointing=False, ckpt_layer=0, adapter_config=None):
         """
         Args:
             img_size (int, tuple): input image size
@@ -155,7 +167,8 @@ class VisionTransformer(nn.Module):
             Block(
                 dim=embed_dim, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
                 drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer,
-                use_grad_checkpointing=(use_grad_checkpointing and i>=depth-ckpt_layer)
+                use_grad_checkpointing=(use_grad_checkpointing and i>=depth-ckpt_layer),
+                adapter_config=adapter_config
             )
             for i in range(depth)])
         self.norm = norm_layer(embed_dim)
