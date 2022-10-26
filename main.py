@@ -27,6 +27,11 @@ def load_image_from_url(img_url, image_size, device):
 	return image
 
 
+@app.get('/'):
+def main():
+	return {'response': 'ok'}
+
+
 @app.get('/image_captioning/{img_url}')
 async def exec_image_captioning(img_url: str):
 	try:
