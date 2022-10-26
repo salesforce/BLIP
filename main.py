@@ -6,6 +6,7 @@ from torchvision.transforms.functional import InterpolationMode
 
 from models.blip import blip_decoder
 from fastapi import FastAPI
+import uvicorn
 
 
 device = 'cuda:0'
@@ -52,3 +53,7 @@ async def exec_image_captioning(img_url: str):
 			return {'caption': caption[0]}
 	except Exception as e:
 		return {'Error': e}
+
+
+if __name__ == '__main__':
+	uvicorn.run(app, host='0.0.0.0', port='8080')
