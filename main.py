@@ -36,9 +36,11 @@ def main():
 	content = '''
 	<body>
 	<form action="/upload" enctype="multipart/form-data" method="post">
-	<input name="task" type="text">
+	<span>Task</span><input name="task" type="text">
+	<br />
 	<br />
 	<input name="file" type="file">
+	<br />
 	<br />
 	<input type="submit">
 	</form>
