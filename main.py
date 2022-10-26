@@ -27,7 +27,7 @@ def load_image_from_url(img_url, image_size, device):
 	return image
 
 
-@app.get('/'):
+@app.get('/')
 def main():
 	return {'response': 'ok'}
 
