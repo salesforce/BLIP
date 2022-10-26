@@ -9,12 +9,14 @@ from fastapi import FastAPI
 import uvicorn
 
 
-device = 'cuda:0'
 app = FastAPI()
 
+device = 'cuda:0'
+image_size = 384
 
-def load_image_from_url(img_url, image_size, device):
-	raw_image = Image.open(requests.get(img_url, stream=True).raw).convert('RGB')   
+
+def load_image_from_url(img, image_size, device):
+	raw_image = Image.open(requests.get(img, stream=True).raw).convert('RGB')   
 
 	w,h = raw_image.size
 	# display(raw_image.resize((w//5,h//5)))
@@ -33,17 +35,12 @@ def main():
 	return {'response': 'ok'}
 
 
-@app.get('/image_captioning/{img_url}')
-async def exec_image_captioning(img_url: str):
+@app.get('/image_captioning')
+def exec_image_captioning(img: str):
+	# img_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg'
+	print(img)
 	try:
-		image_size = 384
-		image = load_image_from_url(img_url, image_size, device)
-
-		model_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_capfilt_large.pth'
-			
-		model = blip_decoder(pretrained=model_url, image_size=image_size, vit='base')
-		model.eval()
-		model = model.to(device)
+		image = load_image_from_url(img, image_size, device)
 
 		with torch.no_grad():
 			# beam search
@@ -56,4 +53,8 @@ async def exec_image_captioning(img_url: str):
 
 
 if __name__ == '__main__':
+	model_url = 'models/model_base_capfilt_large.pth'
+	model = blip_decoder(pretrained=model_url, image_size=image_size, vit='base')
+	model.eval()
+	model = model.to(device)
 	uvicorn.run(app, host='0.0.0.0', port='8080')
