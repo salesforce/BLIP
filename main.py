@@ -6,7 +6,8 @@ import torch
 
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import HTMLResponse
-from models.blip import blip_decoder
+from models.blip import blip_decoder, blip_vqa, blip_feature_extractor, blip_itm
+
 import uvicorn
 
 
@@ -90,15 +91,15 @@ if __name__ == '__main__':
 	image_captioning_model.eval()
 	image_captioning_model = image_captioning_model.to(device)
 
-	vqa_model = blip_decoder(pretrained='./models/model_base_vqa_capfilt_large.pth', image_size=image_size, vit='base')
+	vqa_model = blip_vqa(pretrained='./models/model_base_vqa_capfilt_large.pth', image_size=image_size, vit='base')
 	vqa_model.eval()
 	vqa_model = vqa_model.to(device)
 
-	feature_extraction_model = blip_decoder(pretrained='./models/model_base.pth', image_size=image_size, vit='base')
+	feature_extraction_model = blip_feature_extractor(pretrained='./models/model_base.pth', image_size=image_size, vit='base')
 	feature_extraction_model.eval()
 	feature_extraction_model = feature_extraction_model.to(device)
 
-	image_text_matching_model = blip_decoder(pretrained='./models/model_base_retrieval_coco.pth', image_size=image_size, vit='base')
+	image_text_matching_model = blip_itm(pretrained='./models/model_base_retrieval_coco.pth', image_size=image_size, vit='base')
 	image_text_matching_model.eval()
 	image_text_matching_model = image_text_matching_model.to(device)
 
