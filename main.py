@@ -6,7 +6,10 @@ import torch
 
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import HTMLResponse
-from models.blip import blip_decoder, blip_vqa, blip_feature_extractor, blip_itm
+
+from models.blip import blip_decoder, blip_feature_extractor
+from models.blip_vqa import blip_vqa
+from models.blip_itm import blip_itm
 
 import uvicorn
 
