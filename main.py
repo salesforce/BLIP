@@ -98,7 +98,7 @@ if __name__ == '__main__':
 	feature_extraction_model.eval()
 	feature_extraction_model = feature_extraction_model.to(device)
 
-	image_text_matching_model = blip_decoder(pretrained=m'./models/model_base_retrieval_coco.pth', image_size=image_size, vit='base')
+	image_text_matching_model = blip_decoder(pretrained='./models/model_base_retrieval_coco.pth', image_size=image_size, vit='base')
 	image_text_matching_model.eval()
 	image_text_matching_model = image_text_matching_model.to(device)
 
