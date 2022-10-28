@@ -20,8 +20,23 @@ device = 'cuda:0'
 image_size = 384
 
 
-def load_image_from_url(img, image_size, device):
+def load_image(img, image_size, device):
 	raw_image = Image.open(img).convert('RGB')
+
+	w,h = raw_image.size
+	# display(raw_image.resize((w//5,h//5)))
+
+	transform = transforms.Compose([
+		transforms.Resize((image_size,image_size),interpolation=InterpolationMode.BICUBIC),
+		transforms.ToTensor(),
+		transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
+		])
+	image = transform(raw_image).unsqueeze(0).to(device)
+	return image
+
+
+def load_image_from_url(img_url, image_size, device):
+	raw_image = Image.open(requests.get(img_url, stream=True).raw).convert('RGB')
 
 	w,h = raw_image.size
 	# display(raw_image.resize((w//5,h//5)))
@@ -57,34 +72,55 @@ def main():
 async def upload_image(task: str = Form(), file: UploadFile = Form()):
 	try:
 		img = file.file
+		image = load_image(img, image_size, device)
 
 		if task == 'image_captioning':
-			image = load_image_from_url(img, image_size, device)
 			with torch.no_grad():
 				# beam search
 				caption = image_captioning_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
 				# nucleus sampling
 				# caption = model.generate(image, sample=True, top_p=0.9, max_length=20, min_length=5)
 				return {'Caption': caption[0]}
-
 		if task == 'vqa':
-			image = load_image_from_url(img, image_size, device)
 			with torch.no_grad():
 				caption = vqa_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
 				return {'Caption': caption[0]}
-
 		if task == 'feature_extraction':
-			image = load_image_from_url(img, image_size, device)
 			with torch.no_grad():
 				caption = feature_extraction_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
 				return {'Caption': caption[0]}
-
 		if task == 'text_matching':
-			image = load_image_from_url(img, image_size, device)
 			with torch.no_grad():
 				caption = image_text_matching_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
 				return {'Caption': caption[0]}
+	except Exception as e:
+		return {'Error': e}
 
+
+@app.post('/upload/url')
+async def upload_image(task: str, img_url: str):
+	try:
+		image = load_image_from_url(img_url, image_size, device)
+
+		if task == 'image_captioning':
+			with torch.no_grad():
+				# beam search
+				caption = image_captioning_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				# nucleus sampling
+				# caption = model.generate(image, sample=True, top_p=0.9, max_length=20, min_length=5)
+				return {'Caption': caption[0]}
+		if task == 'vqa':
+			with torch.no_grad():
+				caption = vqa_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
+		if task == 'feature_extraction':
+			with torch.no_grad():
+				caption = feature_extraction_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
+		if task == 'text_matching':
+			with torch.no_grad():
+				caption = image_text_matching_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
 	except Exception as e:
 		return {'Error': e}
 
