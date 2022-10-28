@@ -36,7 +36,7 @@ def main():
 	content = '''
 	<body>
 	<form action="/upload" enctype="multipart/form-data" method="post">
-	<span>Task</span><input name="task" type="text">
+	<span>Task: </span><input name="task" type="text">
 	<br />
 	<br />
 	<input name="file" type="file">
@@ -53,22 +53,53 @@ def main():
 async def upload_image(task: str = Form(), file: UploadFile = Form()):
 	try:
 		img = file.file
+
 		if task == 'image_captioning':
 			image = load_image_from_url(img, image_size, device)
-
 			with torch.no_grad():
 				# beam search
-				caption = model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				caption = image_captioning_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
 				# nucleus sampling
-				# caption = model.generate(image, sample=True, top_p=0.9, max_length=20, min_length=5) 
+				# caption = model.generate(image, sample=True, top_p=0.9, max_length=20, min_length=5)
 				return {'Caption': caption[0]}
+
+		if task == 'vqa':
+			image = load_image_from_url(img, image_size, device)
+			with torch.no_grad():
+				caption = vqa_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
+
+		if task == 'feature_extraction':
+			image = load_image_from_url(img, image_size, device)
+			with torch.no_grad():
+				caption = feature_extraction_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
+
+		if task == 'text_matching':
+			image = load_image_from_url(img, image_size, device)
+			with torch.no_grad():
+				caption = image_text_matching_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
+				return {'Caption': caption[0]}
+
 	except Exception as e:
 		return {'Error': e}
 
 
 if __name__ == '__main__':
-	model_url = './models/model_base_capfilt_large.pth'
-	model = blip_decoder(pretrained=model_url, image_size=image_size, vit='base')
-	model.eval()
-	model = model.to(device)
-	uvicorn.run(app, host='0.0.0.0', port=8080)
+	image_captioning_model = blip_decoder(pretrained='./models/model_base_capfilt_large.pth', image_size=image_size, vit='base')
+	image_captioning_model.eval()
+	image_captioning_model = image_captioning_model.to(device)
+
+	vqa_model = blip_decoder(pretrained='./models/model_base_vqa_capfilt_large.pth', image_size=image_size, vit='base')
+	vqa_model.eval()
+	vqa_model = vqa_model.to(device)
+
+	feature_extraction_model = blip_decoder(pretrained='./models/model_base.pth', image_size=image_size, vit='base')
+	feature_extraction_model.eval()
+	feature_extraction_model = feature_extraction_model.to(device)
+
+	image_text_matching_model = blip_decoder(pretrained=m'./models/model_base_retrieval_coco.pth', image_size=image_size, vit='base')
+	image_text_matching_model.eval()
+	image_text_matching_model = image_text_matching_model.to(device)
+
+	uvicorn.run(app, host='0.0.0.0', port=80)
