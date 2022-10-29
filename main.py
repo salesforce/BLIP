@@ -109,18 +109,6 @@ async def upload_image(task: str, img_url: str):
 				# nucleus sampling
 				# caption = model.generate(image, sample=True, top_p=0.9, max_length=20, min_length=5)
 				return {'Caption': caption[0]}
-		if task == 'vqa':
-			with torch.no_grad():
-				caption = vqa_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
-				return {'Caption': caption[0]}
-		if task == 'feature_extraction':
-			with torch.no_grad():
-				caption = feature_extraction_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
-				return {'Caption': caption[0]}
-		if task == 'text_matching':
-			with torch.no_grad():
-				caption = image_text_matching_model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5) 
-				return {'Caption': caption[0]}
 	except Exception as e:
 		return {'Error': e}
 
