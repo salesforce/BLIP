@@ -108,10 +108,10 @@ def main():
 	<body>
 	<form action="/upload" enctype="multipart/form-data" method="post">
 	<input name="task" type="text" value="feature_extraction" hidden>
-	<span>Question: </span><input name="question" type="text">
+	<span>Caption: </span><input name="caption" type="text">
 	<br />
 	<br />
-	<span>Mode (<i>multimodal, image, text</i>): </span><input name="mode" type="text" value="multimodal">
+	<span>Mode (<i>multimodal, image or text</i>): </span><input name="mode" type="text" value="multimodal">
 	<br />
 	<br />
 	<input name="file" type="file">
@@ -130,7 +130,7 @@ def main():
 	<body>
 	<form action="/upload" enctype="multipart/form-data" method="post">
 	<input name="task" type="text" value="text_matching" hidden>
-	<span>Question: </span><input name="question" type="text">
+	<span>Caption: </span><input name="caption" type="text">
 	<br />
 	<br />
 	<span>Match head (<i>itm or itc</i>): </span><input name="match_head" type="text" value="itm">
