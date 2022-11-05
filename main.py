@@ -145,10 +145,10 @@ def main():
 @app.post('/upload')
 async def upload_image(
 	task: str = Form(),
-	question: str = Form(),
-	caption: str = Form(),
-	mode: str = Form(),
-	match_head: str = Form(),
+	question: [str, None] = Form(),
+	caption: [str, None] = Form(),
+	mode: [str, None] = Form(),
+	match_head: [str, None] = Form(),
 	file: UploadFile = Form()
 ):
 	try:
