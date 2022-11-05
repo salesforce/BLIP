@@ -6,6 +6,7 @@ import torch
 
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import HTMLResponse
+from typing import Optional
 
 from models.blip import blip_decoder, blip_feature_extractor
 from models.blip_vqa import blip_vqa
@@ -110,6 +111,9 @@ def main():
 	<span>Question: </span><input name="question" type="text">
 	<br />
 	<br />
+	<span>Mode (<i>multimodal, image, text</i>): </span><input name="mode" type="text" value="multimodal">
+	<br />
+	<br />
 	<input name="file" type="file">
 	<br />
 	<br />
@@ -129,7 +133,7 @@ def main():
 	<span>Question: </span><input name="question" type="text">
 	<br />
 	<br />
-	<span>Mode (<i>itm or itc</i>): </span><input name="mode" type="text" value="itm">
+	<span>Match head (<i>itm or itc</i>): </span><input name="match_head" type="text" value="itm">
 	<br />
 	<br />
 	<input name="file" type="file">
@@ -145,10 +149,10 @@ def main():
 @app.post('/upload')
 async def upload_image(
 	task: str = Form(),
-	question: str | None = Form(),
-	caption: str | None = Form(),
-	mode: str | None = Form(),
-	match_head: str | None = Form(),
+	question: Optional[str] = Form(None),
+	caption: Optional[str]  = Form(None),
+	mode: Optional[str]  = Form(None),
+	match_head: Optional[str] = Form(None),
 	file: UploadFile = Form()
 ):
 	try:
@@ -164,7 +168,7 @@ async def upload_image(
 				return {'Caption': result[0]}
 		if task == 'vqa':
 			with torch.no_grad():
-				answer = vqa_model(image, question, sample=False, num_beams=3, max_length=20, min_length=5) 
+				answer = vqa_model(image, question, train=False, inference='generate')
 				return {'Answer': answer[0]}
 		if task == 'feature_extraction':
 			with torch.no_grad():
@@ -174,7 +178,7 @@ async def upload_image(
 			with torch.no_grad():
 				if match_head == 'itm':
 					itm_output = image_text_matching_model(image, caption, match_head)
-					itm_score = torch.nn.functional.softmax(itm_output,dim=1)[:,1]
+					itm_score = torch.nn.functional.softmax(itm_output, dim=1)[:,1]
 					return {'The image and text is matched with a probability of %.4f'%itm_score}
 				elif match_head == 'itc':
 					itc_score = image_text_matching_model(image, caption, match_head)
