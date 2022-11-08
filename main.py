@@ -4,6 +4,7 @@ from PIL import Image
 import requests
 import torch
 
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import HTMLResponse
 from typing import Optional
@@ -16,6 +17,14 @@ import uvicorn
 
 
 app = FastAPI()
+
+# cors
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 device = 'cuda:0'
 image_size = 384
