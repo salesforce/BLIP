@@ -70,7 +70,7 @@ class BLIP_Base(nn.Module):
                                        encoder_hidden_states = image_embeds,
                                        encoder_attention_mask = image_atts,      
                                        return_dict = True,
-                                      )              
+                                      )
             return output.last_hidden_state
         
         

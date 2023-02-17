@@ -44,4 +44,6 @@ caption = 'a woman sitting on the beach with a dog'
 multimodal_feature = model(image, caption, mode='multimodal')[0, 0]
 image_feature = model(image, caption, mode='image')[0, 0]
 text_feature = model(image, caption, mode='text')[0, 0]
+##% -----------------------------------------------------------------------------
+
 
