@@ -33,9 +33,9 @@ from models.blip import blip_feature_extractor
 image_size = 224
 image = load_demo_image(image_size=image_size, device=device)
 
-model_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base.pth'
+model_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_large.pth'
 
-model = blip_feature_extractor(pretrained=model_url, image_size=image_size, vit='base')
+model = blip_feature_extractor(pretrained=model_url, image_size=image_size, vit='large')
 model.eval()
 model = model.to(device)
 
