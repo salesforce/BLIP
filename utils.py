@@ -4,19 +4,19 @@ def cosine_lr_schedule(optimizer, epoch, max_epoch, init_lr, min_lr):
     lr = (init_lr - min_lr) * 0.5 * (1. + math.cos(math.pi * epoch / max_epoch)) + min_lr
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
-        
+
 def warmup_lr_schedule(optimizer, step, max_step, init_lr, max_lr):
     """Warmup the learning rate"""
     lr = min(max_lr, init_lr + (max_lr - init_lr) * step / max_step)
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr    
+        param_group['lr'] = lr
 
-def step_lr_schedule(optimizer, epoch, init_lr, min_lr, decay_rate):        
+def step_lr_schedule(optimizer, epoch, init_lr, min_lr, decay_rate):
     """Decay the learning rate"""
     lr = max(min_lr, init_lr * (decay_rate**epoch))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr    
-        
+        param_group['lr'] = lr
+
 import numpy as np
 import io
 import os
@@ -123,8 +123,8 @@ class MetricLogger(object):
             loss_str.append(
                 "{}: {:.4f}".format(name, meter.global_avg)
             )
-        return self.delimiter.join(loss_str)    
-    
+        return self.delimiter.join(loss_str)
+
     def synchronize_between_processes(self):
         for meter in self.meters.values():
             meter.synchronize_between_processes()
@@ -177,7 +177,7 @@ class MetricLogger(object):
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
         print('{} Total time: {} ({:.4f} s / it)'.format(
             header, total_time_str, total_time / len(iterable)))
-        
+
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
@@ -273,6 +273,14 @@ def init_distributed_mode(args):
     torch.distributed.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
                                          world_size=args.world_size, rank=args.rank)
     torch.distributed.barrier()
-    setup_for_distributed(args.rank == 0)        
-        
-        
+    setup_for_distributed(args.rank == 0)
+
+
+def collate_fn_cirr(batch: list):
+    """
+    Discard None images in a batch when using torch DataLoader
+    :param batch: input_batch
+    :return: output_batch = input_batch - None_values
+    """
+    batch = list(filter(lambda x: x is not None, batch))
+    return torch.utils.data.dataloader.default_collate(batch)
