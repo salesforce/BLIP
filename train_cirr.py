@@ -40,10 +40,32 @@ def main(args, config):
                                                           is_trains=[True, False, False],
                                                           collate_fns=[collate_fn_cirr, collate_fn_cirr, collate_fn_cirr])
 
+    # in 'relative' mode (for 'classic', separate loaders must be written but we wont use it for now)
+
+    # train loader
+    print('train loader')
     for reference_images, target_images, captions in train_loader:
         print(reference_images.size())
         print(target_images.size())
         print(captions)
+        break
+
+    # val loader
+    print('val loader')
+    for batch_reference_names, batch_target_names, captions, batch_group_members in val_loader:
+        print(batch_reference_names)
+        print(batch_target_names)
+        print(captions)
+        print(batch_group_members)
+        break
+
+    # test loader
+    print('test loader')
+    for batch_pairs_id, batch_reference_names, captions, batch_group_members in test_loader:
+        print(batch_pairs_id)
+        print(batch_reference_names)
+        print(captions)
+        print(batch_group_members)
         break
 
 if __name__ == '__main__':
