@@ -1,0 +1,6 @@
+path: './fashion-200k'
+
+image_size: 384
+
+batch_size_train: 32
+batch_size_test: 32
