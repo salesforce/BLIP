@@ -14,6 +14,7 @@ from data.nlvr_dataset import nlvr_dataset
 from data.pretrain_dataset import pretrain_dataset
 from transform.randaugment import RandomAugment
 from data.cirr_dataset import CIRRDataset
+from data.fashion200k_dataset import Fashion200kDataset
 
 def create_dataset(dataset, config, min_scale=0.5):
 
@@ -78,6 +79,12 @@ def create_dataset(dataset, config, min_scale=0.5):
         val_dataset = CIRRDataset('val', 'relative', transform_test)
         test_dataset = CIRRDataset('test1', 'relative', transform_test)
         return train_dataset, val_dataset, test_dataset
+    
+    elif dataset == 'fashion200k':
+        train_dataset = Fashion200kDataset(config['path'], 'train', transform_train)
+        test_dataset = Fashion200kDataset(config['path'], 'test', transform_test)
+        return train_dataset, test_dataset
+        
 
 def create_sampler(datasets, shuffles, num_tasks, global_rank):
     samplers = []
