@@ -294,7 +294,8 @@ if __name__ == "__main__":
     dim = 768 # suggested to be consistent with BERT
     num_heads = 12
     num_layers = 6
-    block = CombinerModel(v_dim=v_dim, l_dim=l_dim, dim=dim, num_heads=num_heads, num_layers=num_layers)
+    device = "cuda"
+    block = CombinerModel(v_dim=v_dim, l_dim=l_dim, dim=dim, num_heads=num_heads, num_layers=num_layers).to(device)
     # define input shape
     batchsize = 16
     maximum_text_length = 77
@@ -307,11 +308,12 @@ if __name__ == "__main__":
     language_mask = torch.zeros([maximum_text_length])
     language_mask[actual_text_length:] = -1e10
     # vision self attention test
+    vision_input, language_input, language_mask = vision_input.to(device), language_input.to(device), language_mask.to(device)
     fused_v, fused_l = block(vision_input, language_input, language_mask)
     v_cls = fused_v[:,-1,:]
     l_cls = fused_l[:,-1,:]
-    v_proj = nn.Linear(1024, 768)
-    l_proj = nn.Linear(768, 768)
+    v_proj = nn.Linear(v_dim, dim).to(device)
+    l_proj = nn.Linear(l_dim, dim).to(device)
     v_cls = v_proj(v_cls)
     l_cls = l_proj(l_cls)
     dummy = (v_cls + l_cls).mean()
