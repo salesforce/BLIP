@@ -246,12 +246,55 @@ class CombinerBlock(nn.Module):
         l = self.layer(None, l, language_mask, mode='l')
         return v, l
 
+class CombinerModel(nn.Module):
+    def __init__(
+            self,
+            v_dim,
+            l_dim,
+            dim,
+            num_heads,
+            num_layers=6,
+            mlp_ratio=4.0,
+            drop=0.0,
+            attn_drop=0.0,
+            drop_path=0.0,
+            act_layer=nn.GELU,
+            norm_layer=nn.LayerNorm,
+            layer_scale_init_values=0.1,
+    ):
+        super().__init__()
+        self.layers = nn.ModuleList([CombinerLayer(
+            v_dim,
+            l_dim,
+            dim,
+            num_heads,
+            mlp_ratio=4.0,
+            drop=0.0,
+            attn_drop=0.0,
+            drop_path=0.0,
+            act_layer=nn.GELU,
+            norm_layer=nn.LayerNorm,
+            layer_scale_init_values=0.1,
+        ) for i in range(num_layers)])
+
+    def forward(self, vision_input, language_input, language_mask):
+        v, l = vision_input, language_input
+        for i, layer in enumerate(self.layers):
+            v, l = layer(v, l, language_mask)
+        return v, l
+
 
 
 
 # TODO: for testing purpose only, delete the code below after layers completed
 if __name__ == "__main__":
-    block = CombinerBlock(v_dim=1024, l_dim=768, dim=768, num_heads=12)
+    # set embedding dimensions based on pretrained encoders
+    v_dim = 1024 # 768 & 1024 are available
+    l_dim = 768 # always 768
+    dim = 768 # suggested to be consistent with BERT
+    num_heads = 12
+    num_layers = 6
+    block = CombinerModel(v_dim=v_dim, l_dim=l_dim, dim=dim, num_heads=num_heads, num_layers=num_layers)
     # define input shape
     batchsize = 16
     maximum_text_length = 77
