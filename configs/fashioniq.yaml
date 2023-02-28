@@ -1,0 +1,7 @@
+img_root: 'data\fashion_iq\images'
+cap_root: 'data\fashion_iq\captions'
+
+image_size: 384
+
+batch_size_train: 32
+batch_size_test: 32
