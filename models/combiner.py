@@ -124,6 +124,13 @@ class Mlp(nn.Module):
         self.act = act_layer()
         self.fc2 = nn.Linear(hidden_features, out_features)
         self.drop = nn.Dropout(drop)
+        self._reset_parameters()
+
+    def _reset_parameters(self):
+        nn.init.xavier_uniform(self.fc1.weight)
+        self.fc1.bias.data.fill_(0)
+        nn.init.xavier_uniform(self.fc2.weight)
+        self.fc2.bias.data.fill_(0)
 
     def forward(self, x):
         x = self.fc1(x)
@@ -246,12 +253,56 @@ class CombinerBlock(nn.Module):
         l = self.layer(None, l, language_mask, mode='l')
         return v, l
 
+class CombinerModel(nn.Module):
+    def __init__(
+            self,
+            v_dim,
+            l_dim,
+            dim,
+            num_heads,
+            num_layers=6,
+            mlp_ratio=4.0,
+            drop=0.0,
+            attn_drop=0.0,
+            drop_path=0.0,
+            act_layer=nn.GELU,
+            norm_layer=nn.LayerNorm,
+            layer_scale_init_values=0.1,
+    ):
+        super().__init__()
+        self.layers = nn.ModuleList([CombinerLayer(
+            v_dim,
+            l_dim,
+            dim,
+            num_heads,
+            mlp_ratio=4.0,
+            drop=0.0,
+            attn_drop=0.0,
+            drop_path=0.0,
+            act_layer=nn.GELU,
+            norm_layer=nn.LayerNorm,
+            layer_scale_init_values=0.1,
+        ) for i in range(num_layers)])
+
+    def forward(self, vision_input, language_input, language_mask):
+        v, l = vision_input, language_input
+        for i, layer in enumerate(self.layers):
+            v, l = layer(v, l, language_mask)
+        return v, l
+
 
 
 
 # TODO: for testing purpose only, delete the code below after layers completed
 if __name__ == "__main__":
-    block = CombinerBlock(v_dim=1024, l_dim=768, dim=768, num_heads=12)
+    # set embedding dimensions based on pretrained encoders
+    v_dim = 1024 # 768 & 1024 are available
+    l_dim = 768 # always 768
+    dim = 768 # suggested to be consistent with BERT
+    num_heads = 12
+    num_layers = 6
+    device = "cuda"
+    block = CombinerModel(v_dim=v_dim, l_dim=l_dim, dim=dim, num_heads=num_heads, num_layers=num_layers).to(device)
     # define input shape
     batchsize = 16
     maximum_text_length = 77
@@ -264,11 +315,12 @@ if __name__ == "__main__":
     language_mask = torch.zeros([maximum_text_length])
     language_mask[actual_text_length:] = -1e10
     # vision self attention test
+    vision_input, language_input, language_mask = vision_input.to(device), language_input.to(device), language_mask.to(device)
     fused_v, fused_l = block(vision_input, language_input, language_mask)
     v_cls = fused_v[:,-1,:]
     l_cls = fused_l[:,-1,:]
-    v_proj = nn.Linear(1024, 768)
-    l_proj = nn.Linear(768, 768)
+    v_proj = nn.Linear(v_dim, dim).to(device)
+    l_proj = nn.Linear(l_dim, dim).to(device)
     v_cls = v_proj(v_cls)
     l_cls = l_proj(l_cls)
     dummy = (v_cls + l_cls).mean()
