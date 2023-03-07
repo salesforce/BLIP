@@ -55,7 +55,7 @@ class Fashion200kDataset(Dataset):
     if split == 'train':
       self.caption_index_init_()
     else:
-      self.caption_index_init_()
+      #self.caption_index_init_()
       self.generate_test_queries_()
 
   def get_different_word(self, source_caption, target_caption):
@@ -81,14 +81,22 @@ class Fashion200kDataset(Dataset):
       source_file, target_file = line.split()
       idx = file2imgid[source_file]
       target_idx = file2imgid[target_file]
-      source_caption = self.imgs[idx]['captions'][0]
-      target_caption = self.imgs[target_idx]['captions'][0]
+      source_img = self.imgs[idx]
+      source_caption = source_img['captions'][0]
+      target_img = self.imgs[target_idx]
+      target_caption = target_img['captions'][0]
       source_word, target_word, mod_str = self.get_different_word(
           source_caption, target_caption)
+
+      source_img_path = source_img['file_path']
+
       self.test_queries += [{
           'source_img_id': idx,
+          'target_img_id': target_idx,
           'source_caption': source_caption,
           'target_caption': target_caption,
+          'source_img': source_img,
+          'target_img': target_img,
           'mod': {
               'str': mod_str
           }
@@ -171,9 +179,24 @@ class Fashion200kDataset(Dataset):
 
   def __getitem__(self, idx):
     
-    # if self.split == 'test':
-    #   return self.test_queries[idx]
-    
+    if self.split == 'test':
+      
+      # retrieve the preloaded test query data
+      test_query = self.test_queries[idx]
+
+      out = {}
+
+      out['source_img_id'] = test_query['source_img_id']
+      out['source_img_data'] = self.get_img(test_query['source_img_id'])  # retrieve image on the fly
+      out['source_caption'] = test_query['source_caption']
+      out['target_img_id'] = test_query['target_img_id']
+      out['target_img_data'] = self.get_img(test_query['target_img_id']) # retrieve image on the fly
+      out['target_caption'] = test_query['source_caption']
+      out['mod'] = test_query['mod']
+
+      return out
+
+      
     idx, target_idx, source_word, target_word, mod_str = self.caption_index_sample_(
         idx)
     out = {}
@@ -196,3 +219,4 @@ class Fashion200kDataset(Dataset):
     if self.transform:
       img = self.transform(img)
     return img
+  
