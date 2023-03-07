@@ -40,6 +40,8 @@ def main(args, config):
                                                           is_trains=[True, False],
                                                           collate_fns=[None, None])
 
+    print('dataloaders loaded')
+   
     # train loader
     print('train loader')
     for out in train_loader:
@@ -56,7 +58,6 @@ def main(args, config):
     # test loader
     print('test loader')
     for out in test_loader:
-        #print(out['source_img_id'])
         print(out['source_img_data'].size()) 
         print(out['source_caption'])
         #print(out['target_img_id'] )
@@ -64,6 +65,14 @@ def main(args, config):
         print(out['target_caption'] )
         print(out['mod'])
         break
+        # #print(out['source_img_id'])
+        # print(out['source_img_data'].size()) 
+        # print(out['source_caption'])
+        # #print(out['target_img_id'] )
+        # print(out['target_img_data'].size())
+        # print(out['target_caption'] )
+        # print(out['mod'])
+        # break
 
 
 if __name__ == '__main__':
