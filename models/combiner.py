@@ -124,6 +124,13 @@ class Mlp(nn.Module):
         self.act = act_layer()
         self.fc2 = nn.Linear(hidden_features, out_features)
         self.drop = nn.Dropout(drop)
+        self._reset_parameters()
+
+    def _reset_parameters(self):
+        nn.init.xavier_uniform(self.fc1.weight)
+        self.fc1.bias.data.fill_(0)
+        nn.init.xavier_uniform(self.fc2.weight)
+        self.fc2.bias.data.fill_(0)
 
     def forward(self, x):
         x = self.fc1(x)
