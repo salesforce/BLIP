@@ -1,7 +1,7 @@
 
 import argparse
 import os
-import ruamel_yaml as yaml
+import ruamel.yaml as yaml
 import numpy as np
 import random
 import time
@@ -29,40 +29,45 @@ def main(args, config):
 
     #### Dataset ####
     print("Creating fashioniq dataset")
-    train_dataset, test_dataset = create_dataset('fashioniq', config)
+    train_dataset, val_dataset, test_dataset = create_dataset('fashioniq', config)
+    print("Done creating fashioniq dataset")
 
-    samplers = [None, None]
-    train_loader, test_loader = create_loader([train_dataset, test_dataset], samplers,
-                                                          batch_size=[config['batch_size_train']]+[config['batch_size_test']],
-                                                          num_workers=[4,4],
-                                                          is_trains=[True, False],
-                                                          collate_fns=[None, None])
+    print("Loading fashioniq dataset")
+    samplers = [None, None, None]
+    train_loader, val_loader, test_loader = create_loader([train_dataset, val_dataset, test_dataset], samplers,
+                                                          batch_size=[config['batch_size_train']]+[config['batch_size_test']]*2,
+                                                          num_workers=[4, 4, 4],
+                                                          is_trains=[True, False, False],
+                                                          collate_fns=[None, None, None])
+    print("Done loading fashioniq dataset")
 
     # train loader
     print('train loader')
     for out in train_loader:
-        print(out)
-        #print(out['source_img_id'])
-        # print(out['source_img_data'].size()) 
-        # print(out['source_caption'])
-        #print(out['target_img_id'] )
-        # print(out['target_img_data'].size())
-        # print(out['target_caption'] )
-        # print(out['mod'])
+        print(len(out['caption_1']))
+        print(out['caption_1'])
+        print(out['caption_2']) 
+        print(out['target_img'])
+        print(out['candidate_img'])
         break
 
+    # val loader
+    print('val loader')
+    for out in val_loader:
+        print(len(out['caption_1']))
+        print(out['caption_1'])
+        print(out['caption_2']) 
+        print(out['target_img'])
+        print(out['candidate_img'])
+        break
 
     # test loader
     print('test loader')
     for out in test_loader:
-        print(out)
-        #print(out['source_img_id'])
-        # print(out['source_img_data'].size()) 
-        # print(out['source_caption'])
-        #print(out['target_img_id'] )
-        # print(out['target_img_data'].size())
-        # print(out['target_caption'] )
-        # print(out['mod'])
+        print(len(out['caption_1']))
+        print(out['caption_1'])
+        print(out['caption_2']) 
+        print(out['candidate_img'])
         break
 
 

@@ -15,7 +15,7 @@ from data.pretrain_dataset import pretrain_dataset
 from transform.randaugment import RandomAugment
 from data.cirr_dataset import CIRRDataset
 from data.fashion200k_dataset import Fashion200kDataset
-from data.fashion_iq.fashioniq_dataset import FashionIQDataset
+from data.fashioniq_dataset import FashionIQDataset
 
 def create_dataset(dataset, config, min_scale=0.5):
 
@@ -87,9 +87,9 @@ def create_dataset(dataset, config, min_scale=0.5):
         return train_dataset, test_dataset
 
     elif dataset == 'fashioniq':
-        train_dataset = FashionIQDataset(config['image_root'], config['ann_root'],'train', transform_train)
-        val_dataset = FashionIQDataset(config['image_root'], config['ann_root'],'val', transform_test)
-        test_dataset = FashionIQDataset(config['image_root'], config['ann_root'],'test', transform_test)
+        train_dataset = FashionIQDataset(config['data_path'], 'train', transform_train)
+        val_dataset = FashionIQDataset(config['data_path'], 'val', transform_test)
+        test_dataset = FashionIQDataset(config['data_path'],'test', transform_test)
         return train_dataset, val_dataset, test_dataset
         
 

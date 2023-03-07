@@ -1,7 +1,7 @@
 # datasets
-
 cirr_dataset/
 fashion200k/
+fashion_iq/
 
 # others
 __pycache__/
