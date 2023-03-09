@@ -87,9 +87,9 @@ def create_dataset(dataset, config, min_scale=0.5):
         return train_dataset, test_dataset
 
     elif dataset == 'fashioniq':
-        train_dataset = FashionIQDataset(config['data_path'], 'train', transform_train)
-        val_dataset = FashionIQDataset(config['data_path'], 'val', transform_test)
-        test_dataset = FashionIQDataset(config['data_path'],'test', transform_test)
+        train_dataset = FashionIQDataset(config['data_path'], 'train', ['dress', 'shirt', 'toptee'], 'relative', transform_train)
+        val_dataset = FashionIQDataset(config['data_path'], 'val', ['dress', 'shirt', 'toptee'], 'relative', transform_test)
+        test_dataset = FashionIQDataset(config['data_path'],'test', ['dress', 'shirt', 'toptee'], 'relative', transform_test)
         return train_dataset, val_dataset, test_dataset
         
 
