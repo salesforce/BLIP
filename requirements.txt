@@ -4,5 +4,5 @@ fairscale==0.4.4
 pycocoevalcap
 opencv-python
 gdown
-zipfile
-ruamel
+zipfile36
+ruamel.yaml

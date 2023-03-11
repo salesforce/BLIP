@@ -1,5 +1,17 @@
 data_path: 'fashion_iq'
 
-image_size: 384
+num_epochs: 3
+
+image_size: 224 # blip default uses 224
+
+max_length: 30 #for tokenizer
+
 batch_size_train: 32
 batch_size_test: 32
+
+v_dim: 768
+l_dim: 768
+dim: 768
+num_heads: 16
+
+combiner_lr: 0.001

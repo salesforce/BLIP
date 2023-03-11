@@ -5,6 +5,7 @@ from torch.utils.data import Dataset
 import gdown
 import zipfile
 from typing import List
+import random
 
 class FashionIQDataset(Dataset):
     def __init__(self, data_path, split: str, dress_types: List[str], mode: str, transform: callable):
@@ -42,10 +43,21 @@ class FashionIQDataset(Dataset):
     def __len__(self):
         return len(self.triplets)
 
+    def preprocess_caption(self, captions):
+        random_num = random.random()
+        if random_num < 0.25:
+            return f"{captions[0].strip('.?, ').capitalize()} and {captions[1].strip('.?, ')}"
+        elif 0.25 < random_num < 0.5:
+            return f"{captions[1].strip('.?, ').capitalize()} and {captions[0].strip('.?, ')}"
+        elif 0.5 < random_num < 0.75:
+            return f"{captions[0].strip('.?, ').capitalize()}"
+        else:
+            return f"{captions[1].strip('.?, ').capitalize()}"
+
     def __getitem__(self, idx):
         try:
             if self.mode == 'relative':
-                image_captions = self.triplets[idx]['captions']
+                image_captions = self.preprocess_caption(self.triplets[idx]['captions'])
                 reference_name = self.triplets[idx]['candidate']
 
                 if self.split == 'train':
