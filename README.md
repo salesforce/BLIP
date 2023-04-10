@@ -2,6 +2,37 @@
 
 ## Announcement: BLIP is now officially integrated into [LAVIS](https://github.com/salesforce/LAVIS) - a one-stop library for language-and-vision research and applications!
 
+## 🤗 Hugging Face integration
+
+BLIP is integrated into the Hugging Face 🤗 [Transformers](https://github.com/huggingface/transformers) library. Let's illustrate inference with a code example below:
+
+Documentation can be found [here](https://huggingface.co/docs/transformers/main/model_doc/blip).
+
+All BLIP checkpoints are on the [hub](https://huggingface.co/models?other=blip).
+
+```
+from PIL import Image
+import requests
+from transformers import BlipProcessor, BlipForConditionalGeneration
+import torch
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+model.to(device)
+
+url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+image = Image.open(requests.get(url, stream=True).raw)
+inputs = processor(images=image, return_tensors="pt").to(device)
+
+generated_ids = model.generate(**inputs)
+generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
+print(generated_text)
+```
+This prints "two cats sleeping on a couch".
+
+Refer to the docs for other examples for VQA and text-image retrieval.
+
 <img src="BLIP.gif" width="700">
 
 This is the PyTorch code of the <a href="https://arxiv.org/abs/2201.12086">BLIP paper</a> [[blog](https://blog.salesforceairesearch.com/blip-bootstrapping-language-image-pretraining/)]. The code has been tested on PyTorch 1.10.
