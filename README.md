@@ -24,7 +24,7 @@ The demo includes code for:
 3. Multimodal / unimodal feature extraction
 4. Image-text matching
 
-Try out the [Web demo](https://huggingface.co/spaces/Salesforce/BLIP), integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). 
+Try out the [Web demo](https://huggingface.co/spaces/Salesforce/BLIP), integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Learn how to use [BLIP to auto-label data](https://github.com/autodistill/autodistill-blip) for fine-tuned model training with [Autodistill](https://github.com/autodistill/autodistill).
 
 Replicate web demo and Docker image is also available at [![Replicate](https://replicate.com/salesforce/blip/badge)](https://replicate.com/salesforce/blip)
 
