@@ -10,6 +10,7 @@ from torch import nn
 import torch.nn.functional as F
 from transformers import BertTokenizer
 import numpy as np
+import os
 
 class BLIP_NLVR(nn.Module):
     def __init__(self,                 
